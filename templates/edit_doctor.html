@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Doctor{% endblock %}
+
+{% block content %}
+
+<div class="card p-3">
+  <h5>Edit Doctor</h5>
+
+  <form method="POST">
+    <input name="name" value="{{doctor.name}}" class="form-control mb-2">
+
+    <input name="specialization" value="{{doctor.specialization}}" class="form-control mb-2">
+
+    <input name="fee" value="{{doctor.fee}}" class="form-control mb-2">
+
+    <button class="btn btn-primary">Update</button>
+  </form>
+</div>
+
+{% endblock %}

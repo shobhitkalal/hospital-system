@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+{% block title %}Billing{% endblock %}
+
+{% block content %}
+
+<!-- TomSelect -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<form method="POST" action="/create_bill">
+
+<div class="row">
+
+  <!-- LEFT SIDE -->
+  <div class="col-md-7">
+
+    <div class="card p-4">
+
+      {% if current_user.role == 'pharmacist' %}
+      <h4 class="mb-3">Medicine Billing</h4>
+
+      <select id="medicine_select" class="form-control mb-3">
+        <option value="">Search Medicine...</option>
+        {% for m in medicines %}
+        <option value="{{m.id}}"
+                data-name="{{m.name}}"
+                data-price="{{m.price}}">
+          {{m.name}} (₹{{m.price}})
+        </option>
+        {% endfor %}
+      </select>
+
+      <div id="selected_medicines"></div>
+      {% endif %}
+
+
+
+      {% if current_user.role in ['lab','lab_administrative'] %}
+      <h4 class="mb-3">Lab Reports</h4>
+
+      <select id="report_select" class="form-control mb-3">
+        <option value="">Search Report...</option>
+        {% for r in reports %}
+        <option value="{{r.id}}"
+                data-name="{{r.name}}"
+                data-fee="{{r.fee}}">
+          {{r.name}} (₹{{r.fee}})
+        </option>
+        {% endfor %}
+      </select>
+
+      <div id="selected_reports"></div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+
+
+  <!-- RIGHT SIDE -->
+  <div class="col-md-5">
+
+    <div class="card p-4">
+
+      <h4 class="mb-3">Patient Details</h4>
+
+      <select name="patient" id="patient_select" class="form-control mb-3" required>
+        <option value="">Search Patient...</option>
+        {% for p in patients %}
+        <option value="{{p.id}}">
+          {{p.first_name}} {{p.last_name}} (ID: {{p.id}})
+        </option>
+        {% endfor %}
+      </select>
+
+      <input type="text" id="patient_id_box" class="form-control mb-4" placeholder="Patient ID" readonly>
+
+
+      {% if current_user.role in ['admin','pharmacist','lab_administrative'] %}
+      <h5>Recommended By</h5>
+
+      <select name="doctor" id="doctor_select" class="form-control mb-3">
+        <option value="">Select Doctor</option>
+        {% for d in doctors %}
+        <option value="{{d.id}}">
+          Dr. {{d.name}} 
+        </option>
+        {% endfor %}
+      </select>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- BILL SUMMARY -->
+<div class="row mt-4">
+  <div class="col-md-12">
+
+    <div class="card p-4 text-center">
+
+      <h4 class="mb-4">Bill Summary</h4>
+
+      <div class="row">
+
+        <div class="col-md-3">
+          <label>Amount</label>
+          <input type="text" id="amount" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label>GST (18%)</label>
+          <input type="text" id="gst" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label>Discount (%)</label>
+          <input type="number" id="discount" class="form-control" value="0" oninput="updateBill()">
+        </div>
+
+        <div class="col-md-3">
+          <label>Total</label>
+          <input type="text" id="total" class="form-control" readonly>
+        </div>
+
+      </div>
+
+      <input type="hidden" name="total" id="final_total_input">
+
+      <button class="btn btn-success mt-4">
+        Create Draft Bill & Send to Admin
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+</form>
+
+
+
+<!-- JS -->
+<script>
+
+let selectedMedicines = [];
+let selectedReports = [];
+
+
+// ---------------- MEDICINES ----------------
+function addMedicine(option){
+
+  let id = option.value;
+  let name = option.dataset.name;
+  let price = parseFloat(option.dataset.price);
+
+  if(selectedMedicines.find(m => m.id == id)) return;
+
+  selectedMedicines.push({id, name, price, qty:1});
+  renderMedicines();
+}
+
+function renderMedicines(){
+
+  let container = document.getElementById("selected_medicines");
+  container.innerHTML = "";
+
+  selectedMedicines.forEach((m,index)=>{
+
+    container.innerHTML += `
+      <div class="card p-3 mb-2">
+        <b>${m.name}</b> (₹${m.price})
+
+        <input type="hidden" name="medicines" value="${m.id}">
+
+        <div class="row mt-2">
+
+          <div class="col-md-4">
+            Qty:
+            <input type="number"
+                   name="qty_${m.id}"
+                   value="${m.qty}"
+                   min="1"
+                   class="form-control"
+                   onchange="updateQty(${index}, this.value)">
+          </div>
+
+          <div class="col-md-4 mt-4">
+            Subtotal: ₹${m.price * m.qty}
+          </div>
+
+          <div class="col-md-4 mt-4 text-end">
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    onclick="removeMedicine(${index})">
+              Remove
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+  });
+
+  updateBill();
+}
+
+function updateQty(index, qty){
+  selectedMedicines[index].qty = parseInt(qty);
+  renderMedicines();
+}
+
+function removeMedicine(index){
+  selectedMedicines.splice(index,1);
+  renderMedicines();
+}
+
+
+
+// ---------------- REPORTS ----------------
+function addReport(option){
+
+  let id = option.value;
+  let name = option.dataset.name;
+  let fee = parseFloat(option.dataset.fee);
+
+  if(selectedReports.find(r => r.id == id)) return;
+
+  selectedReports.push({id, name, fee});
+  renderReports();
+}
+
+function renderReports(){
+
+  let container = document.getElementById("selected_reports");
+  container.innerHTML = "";
+
+  selectedReports.forEach((r,index)=>{
+
+    container.innerHTML += `
+      <div class="card p-3 mb-2">
+        <b>${r.name}</b> (₹${r.fee})
+
+        <input type="hidden" name="reports" value="${r.id}">
+
+        <div class="row mt-2">
+
+          <div class="col-md-6">
+            Fee: ₹${r.fee}
+          </div>
+
+          <div class="col-md-6 text-end">
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    onclick="removeReport(${index})">
+              Remove
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+  });
+
+  updateBill();
+}
+
+function removeReport(index){
+  selectedReports.splice(index,1);
+  renderReports();
+}
+
+
+
+// ---------------- BILL CALCULATION ----------------
+function updateBill(){
+
+  let total = 0;
+
+  selectedMedicines.forEach(m=>{
+    total += m.price * m.qty;
+  });
+
+  selectedReports.forEach(r=>{
+    total += r.fee;
+  });
+
+  let gst = total * 0.18;
+
+  let discount = parseFloat(document.getElementById("discount").value) || 0;
+  let discountValue = total * (discount / 100);
+
+  let finalTotal = total + gst - discountValue;
+
+  document.getElementById("amount").value = total.toFixed(2);
+  document.getElementById("gst").value = gst.toFixed(2);
+  document.getElementById("total").value = finalTotal.toFixed(2);
+
+  document.getElementById("final_total_input").value = finalTotal.toFixed(2);
+}
+
+
+
+// ---------------- EVENTS ----------------
+document.getElementById("medicine_select")
+?.addEventListener("change", function(){
+  let option = this.options[this.selectedIndex];
+  if(option.value){
+    addMedicine(option);
+    this.value = "";
+  }
+});
+
+document.getElementById("report_select")
+?.addEventListener("change", function(){
+  let option = this.options[this.selectedIndex];
+  if(option.value){
+    addReport(option);
+    this.value = "";
+  }
+});
+
+
+
+// Patient ID auto fill
+document.getElementById("patient_select")
+.addEventListener("change", function(){
+  document.getElementById("patient_id_box").value = this.value;
+});
+
+
+
+// SEARCH DROPDOWNS
+new TomSelect("#patient_select",{});
+if(document.getElementById("medicine_select")){
+  new TomSelect("#medicine_select",{});
+}
+if(document.getElementById("report_select")){
+  new TomSelect("#report_select",{});
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>HOS-POS</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:#f5f5f7;
+color:#111827;
+overflow-x:hidden;
+}
+
+
+/* Navbar */
+
+.navbar{
+padding:22px 60px;
+background:rgba(255,255,255,.72);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(0,0,0,.06);
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.brand{
+font-size:28px;
+font-weight:700;
+letter-spacing:-1px;
+}
+
+.nav-btn{
+border-radius:30px;
+padding:10px 24px;
+font-weight:600;
+transition:.35s;
+}
+
+.nav-btn:hover{
+transform:translateY(-2px);
+}
+
+
+
+/* Hero */
+
+.hero{
+padding-top:120px;
+padding-bottom:120px;
+text-align:center;
+animation:fadeup 1s ease;
+}
+
+.hero h1{
+font-size:92px;
+font-weight:800;
+line-height:1.03;
+letter-spacing:-4px;
+max-width:1100px;
+margin:auto;
+}
+
+.hero p{
+font-size:30px;
+font-weight:400;
+color:#6b7280;
+max-width:900px;
+margin:35px auto;
+line-height:1.6;
+}
+
+
+.gradient-text{
+background:linear-gradient(
+90deg,
+#111827,
+#2563eb,
+#111827
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+
+
+/* Buttons */
+
+.hero-buttons{
+margin-top:50px;
+}
+
+.hero-buttons .btn{
+padding:16px 34px;
+font-size:18px;
+font-weight:600;
+border-radius:35px;
+transition:.35s;
+}
+
+.hero-buttons .btn:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+
+/* Hero image glass panel */
+
+.mockup{
+margin-top:90px;
+background:white;
+border-radius:40px;
+padding:50px;
+box-shadow:
+0 25px 70px rgba(0,0,0,.08);
+max-width:1100px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.mock-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+}
+
+.mini-card{
+background:#fbfbfc;
+padding:35px;
+border-radius:30px;
+box-shadow:
+inset 0 0 0 1px rgba(0,0,0,.04);
+transition:.35s;
+}
+
+.mini-card:hover{
+transform:translateY(-6px);
+}
+
+.mini-card h3{
+font-size:42px;
+font-weight:800;
+margin-top:15px;
+}
+
+.mini-card p{
+color:#6b7280;
+}
+
+
+/* Sections */
+
+.section{
+padding:140px 40px;
+text-align:center;
+}
+
+.section h2{
+font-size:68px;
+font-weight:800;
+letter-spacing:-2px;
+margin-bottom:30px;
+}
+
+.section p{
+max-width:850px;
+margin:auto;
+font-size:26px;
+color:#6b7280;
+line-height:1.7;
+}
+
+
+/* Feature cards */
+
+.feature-wrap{
+margin-top:70px;
+}
+
+.feature-card{
+background:white;
+padding:50px;
+border-radius:35px;
+box-shadow:
+0 18px 50px rgba(0,0,0,.06);
+height:100%;
+transition:.35s;
+}
+
+.feature-card:hover{
+transform:translateY(-10px);
+}
+
+.feature-card h4{
+font-size:30px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+
+
+/* Footer */
+
+.footer{
+padding:70px;
+text-align:center;
+color:#6b7280;
+font-size:15px;
+}
+
+
+/* Animations */
+
+@keyframes fadeup{
+from{
+opacity:0;
+transform:translateY(50px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+<div class="brand">
+HOS-POS
+</div>
+
+<div class="ms-auto">
+<a href="/login" class="btn btn-outline-dark nav-btn me-2">
+Login
+</a>
+
+<a href="/register" class="btn btn-dark nav-btn">
+Get Started
+</a>
+</div>
+</nav>
+
+
+
+<!-- Hero -->
+<section class="hero">
+
+<h1>
+Healthcare.
+<span class="gradient-text">
+Reimagined.
+</span>
+</h1>
+
+<p>
+A premium hospital management platform for patients,
+pharmacy, diagnostics and intelligent billing.
+</p>
+
+<div class="hero-buttons">
+<a href="/register" class="btn btn-dark me-3">
+Start Now
+</a>
+
+<a href="/login" class="btn btn-outline-dark">
+Open Dashboard
+</a>
+</div>
+
+
+<div class="mockup">
+
+<div class="mock-grid">
+
+<div class="mini-card">
+🧑‍⚕️
+<h3>2,500+</h3>
+<p>Patients Managed</p>
+</div>
+
+<div class="mini-card">
+💊
+<h3>Live Stock</h3>
+<p>Pharmacy Automation</p>
+</div>
+
+<div class="mini-card">
+🧾
+<h3>Smart Billing</h3>
+<p>Draft to Invoice Flow</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- Section -->
+<section class="section">
+
+<h2>
+Built for modern hospitals.
+</h2>
+
+<p>
+Role based workflows for admin, pharmacist and lab teams,
+with billing approvals, inventory and professional invoicing.
+</p>
+
+
+<div class="container feature-wrap">
+<div class="row g-4">
+
+<div class="col-md-4">
+<div class="feature-card">
+<h4>Patient Care</h4>
+<p>
+Digital registration, patient records,
+doctor assignment and treatment management.
+</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="feature-card">
+<h4>Pharmacy + Lab</h4>
+<p>
+Draft medicine and report billing
+with approval-based workflow.
+</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="feature-card">
+<h4>Final Invoice</h4>
+<p>
+Insurance, doctor fees,
+professional printable invoices.
+</p>
+</div>
+</div>
+
+</div>
+</div>
+
+</section>
+
+
+
+<section class="section" style="padding-top:40px">
+
+<h2>
+Simple. Powerful. Elegant.
+</h2>
+
+<p>
+Inspired by premium product experiences,
+crafted for healthcare operations.
+</p>
+
+<div class="mt-5">
+<a href="/register" class="btn btn-dark btn-lg">
+Launch Your Hospital System
+</a>
+</div>
+
+</section>
+
+
+
+<div class="footer">
+© 2026 HOS-POS • Smart Hospital Management Platform
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card p-4">
+  <h5>Edit Medicine</h5>
+
+  <form method="POST">
+    <input name="name" class="form-control mb-2" value="{{medicine.name}}">
+    <input name="description" class="form-control mb-2" value="{{medicine.description}}">
+    <input name="price" class="form-control mb-2" value="{{medicine.price}}">
+    <input name="quantity" class="form-control mb-2" value="{{medicine.quantity}}">
+
+    <button class="btn btn-success">Update</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+font-family:Arial;
+padding:40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+}
+
+h1{
+text-align:center;
+}
+</style>
+</head>
+<body>
+
+<h1>Hospital Invoice</h1>
+
+<hr>
+
+<h3>Patient Details</h3>
+
+<p>
+Name:
+{{patient.first_name}}
+{{patient.last_name}}
+</p>
+
+<p>
+Bill ID:
+{{bill.id}}
+</p>
+
+
+{% if medicines %}
+<h3>Medicines</h3>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Qty</th>
+<th>Rate</th>
+<th>Total</th>
+</tr>
+
+{% for m in medicines %}
+<tr>
+<td>{{m.name}}</td>
+<td>{{m.qty}}</td>
+<td>{{m.price}}</td>
+<td>{{m.subtotal}}</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endif %}
+
+
+
+{% if reports %}
+<h3>Lab Reports</h3>
+
+<table>
+<tr>
+<th>Report</th>
+<th>Fee</th>
+</tr>
+
+{% for r in reports %}
+<tr>
+<td>{{r.name}}</td>
+<td>{{r.fee}}</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endif %}
+
+
+<h2>
+Doctor Fee:
+₹{{bill.doctor_fee}}
+</h2>
+
+<h1>
+Grand Total:
+₹{{bill.total}}
+</h1>
+
+</body>
+</html>

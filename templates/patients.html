@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Patients{% endblock %}
+
+{% block content %}
+
+<!-- Add Patient -->
+<div class="card p-4 mb-4">
+  <h5>👤 Add Patient</h5>
+
+  <form method="POST" action="/add_patient">
+
+    <div class="row">
+      <div class="col-md-6">
+        <input name="first_name" class="form-control mb-2" placeholder="First Name" required>
+      </div>
+
+      <div class="col-md-6">
+        <input name="last_name" class="form-control mb-2" placeholder="Last Name" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <input name="age" type="number" class="form-control mb-2" placeholder="Age">
+      </div>
+
+      <div class="col-md-4">
+        <select name="gender" class="form-control mb-2">
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <input name="guardian" class="form-control mb-2" placeholder="Guardian Name">
+      </div>
+    </div>
+
+    <input name="email" type="email" class="form-control mb-2" placeholder="Email">
+    <input name="phone" class="form-control mb-2" placeholder="Phone Number">
+    <input name="address" class="form-control mb-2" placeholder="Address">
+
+    <button class="btn btn-success mt-2">Add Patient</button>
+
+  </form>
+</div>
+
+<!-- Toggle Button -->
+<button class="btn btn-primary mb-3" onclick="togglePatients(this)">
+  View Patients
+</button>
+
+<!-- Patient List -->
+<div id="patientTable" style="display:none;">
+
+  <!-- Search -->
+  <input type="text" id="searchPatient" class="form-control mb-3" placeholder="🔍 Search patient...">
+
+  <div class="card p-3">
+
+    {% if patients|length == 0 %}
+      <p>No patients found</p>
+    {% else %}
+
+    <table class="table table-hover" id="patientData">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for p in patients %}
+        <tr>
+          <td>{{p.first_name}} {{p.last_name}}</td>
+          <td>{{p.age}}</td>
+          <td>{{p.gender}}</td>
+          <td>{{p.phone}}</td>
+          <td>{{p.email}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+
+function togglePatients(btn) {
+  let x = document.getElementById("patientTable");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    btn.innerText = "Hide Patients";
+  } else {
+    x.style.display = "none";
+    btn.innerText = "View Patients";
+  }
+}
+
+// Search
+document.getElementById("searchPatient").addEventListener("keyup", function() {
+  let filter = this.value.toLowerCase();
+  let rows = document.querySelectorAll("#patientData tbody tr");
+
+  rows.forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+  });
+});
+
+</script>
+
+{% endblock %}

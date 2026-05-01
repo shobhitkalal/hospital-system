@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Bill History{% endblock %}
+
+{% block content %}
+
+<div class="card p-4">
+
+  <h3 class="mb-4"> Bill History</h3>
+
+  {% if bills %}
+
+    {% for b in bills %}
+
+    <a href="/invoice/{{b.id}}" style="text-decoration:none;">
+
+      <div class="card p-4 mb-3 hover-card">
+
+        <div class="d-flex justify-content-between">
+
+          <!-- LEFT -->
+          <div>
+            <h5 class="mb-1">
+               {{b.patient_name}}
+            </h5>
+
+            <p class="mb-1 text-muted">
+              Bill ID: #{{b.id}}
+            </p>
+
+            {% if b.date %}
+            <small class="text-muted">
+               {{b.date.strftime('%d %b %Y, %I:%M %p')}}
+            </small>
+            {% endif %}
+          </div>
+
+          <!-- RIGHT -->
+          <div class="text-end">
+            <h4 style="color:#2563eb;">
+              ₹{{b.total}}
+            </h4>
+
+            <span class="badge bg-success">
+              Completed
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </a>
+
+    {% endfor %}
+
+  {% else %}
+
+    <p>No completed bills found.</p>
+
+  {% endif %}
+
+</div>
+
+<style>
+.hover-card{
+  transition:.3s;
+  cursor:pointer;
+}
+
+.hover-card:hover{
+  transform:translateY(-5px) scale(1.01);
+  box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+</style>
+
+{% endblock %}

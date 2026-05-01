@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+{% block title %}Final Invoice{% endblock %}
+
+{% block content %}
+
+<div class="card p-5 shadow-lg">
+
+<div class="text-center mb-5">
+<h2 style="
+font-weight:800;
+letter-spacing:-1px;">
+{{ current_user.Hospital_name }}
+</h2>
+<p class="text-muted">
+Professional Hospital Billing Statement
+</p>
+<hr>
+</div>
+
+
+
+<!-- Patient + Bill -->
+<div class="row mb-5">
+
+<div class="col-md-6">
+<h5>Patient Details</h5>
+
+<b>Patient ID:</b>
+{{patient.id}} <br>
+
+<b>Name:</b>
+{{patient.first_name}}
+{{patient.last_name}}<br>
+
+<b>Phone:</b>
+{{patient.phone}} <br>
+
+{% if patient.email %}
+<b>Email:</b>
+{{patient.email}}
+{% endif %}
+
+</div>
+
+
+<div class="col-md-6 text-end">
+<h5>Invoice Details</h5>
+
+<b>Bill ID:</b>
+{{bill.id}} <br>
+
+<b>Status:</b>
+<span class="badge bg-success">
+{{bill.status}}
+</span>
+</div>
+
+</div>
+
+
+
+<!-- Medicines -->
+{% if medicines %}
+
+<h4 class="mb-3">
+Medicine Charges
+</h4>
+
+<table class="table table-bordered">
+<tr>
+<th>Medicine</th>
+<th>Qty</th>
+<th>Rate</th>
+<th>Subtotal</th>
+</tr>
+
+{% for m in medicines %}
+<tr>
+<td>{{m.name}}</td>
+<td>{{m.qty}}</td>
+<td>₹{{m.price}}</td>
+<td>₹{{m.subtotal}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+
+
+<!-- Reports -->
+{% if reports %}
+
+<h4 class="mt-5 mb-3">
+Lab Reports
+</h4>
+
+<table class="table table-bordered">
+<tr>
+<th>Report</th>
+<th>Fee</th>
+</tr>
+
+{% for r in reports %}
+<tr>
+<td>{{r.name}}</td>
+<td>₹{{r.fee}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+
+
+
+<!-- ADMIN FINALIZE -->
+{% if current_user.role=='admin' and bill.status != "completed" %}
+
+<form method="POST" class="mt-5">
+
+<h4 class="mb-3">
+Add Doctor Consultation
+</h4>
+
+<select
+id="doctor_fee"
+name="doctor"
+class="form-control mb-4"
+required>
+
+<option value=""
+data-fee="0">
+Select Doctor
+</option>
+
+{% for d in doctors %}
+<option
+value="{{d.id}}"
+data-fee="{{d.fee}}">
+Dr. {{d.name}} (₹{{d.fee}})
+</option>
+{% endfor %}
+
+</select>
+
+
+
+<!-- BILL SUMMARY -->
+<div class="card p-4 mt-4">
+
+<h3 class="mb-4">
+Bill Summary
+</h3>
+
+
+<p>
+Medicine Charges :
+₹ <span id="medicine_total">
+{{medicine_total}}
+</span>
+</p>
+
+
+<p>
+Lab Charges :
+₹ <span id="report_total">
+{{report_total}}
+</span>
+</p>
+
+
+<p>
+Doctor Fee :
+₹ <span id="doctor_amount">
+0
+</span>
+</p>
+
+
+<hr>
+
+
+<h2 style="font-weight:800;">
+Grand Total :
+₹ <span id="grand_total">
+{{medicine_total+report_total}}
+</span>
+</h2>
+
+
+<input
+type="hidden"
+name="doctor_fee"
+id="doctor_fee_hidden"
+value="0">
+
+
+<button
+class="btn btn-success mt-4">
+Finalize Bill
+</button>
+
+</div>
+
+</form>
+
+{% endif %}
+
+
+
+
+<!-- Completed Bill Actions -->
+{% if bill.status=="completed" %}
+
+<div class="card p-4 mt-5">
+
+<h4>Final Approved Invoice</h4>
+
+<p>
+Doctor:
+{{ bill.doctor_name }}
+</p>
+
+<p>
+Doctor Fee:
+₹{{ bill.doctor_fee }}
+</p>
+
+<h3>
+Final Total:
+₹{{ bill.total }}
+</h3>
+
+<hr>
+
+<a
+href="/download_pdf/{{bill.id}}"
+class="btn btn-primary">
+Download Invoice PDF
+</a>
+
+<a
+href="/send_email/{{bill.id}}"
+class="btn btn-warning">
+Send Email
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+
+
+<script>
+
+const dropdown =
+document.getElementById(
+"doctor_fee"
+);
+
+if(dropdown){
+
+dropdown.addEventListener(
+"change",
+function(){
+
+let doctorFee =
+parseFloat(
+this.options[
+this.selectedIndex
+].dataset.fee || 0
+);
+
+document.getElementById(
+"doctor_amount"
+).innerText=
+doctorFee.toFixed(2);
+
+
+document.getElementById(
+"doctor_fee_hidden"
+).value=
+doctorFee;
+
+
+let medicineTotal=
+parseFloat(
+document.getElementById(
+"medicine_total"
+).innerText
+);
+
+let reportTotal=
+parseFloat(
+document.getElementById(
+"report_total"
+).innerText
+);
+
+
+let grand=
+medicineTotal+
+reportTotal+
+doctorFee;
+
+
+document.getElementById(
+"grand_total"
+).innerText=
+grand.toFixed(2);
+
+}
+);
+
+}
+
+</script>
+
+{% endblock %}

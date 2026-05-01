@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #2563eb, #1e3a8a);
+}
+
+/* Center container */
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.auth-card {
+  background: white;
+  padding: 30px;
+  width: 320px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.card:hover {
+  box-shadow: 0 0 25px rgba(59,130,246,0.6);
+}
+
+body {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+/* Inputs */
+.auth-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Button */
+.auth-card button {
+  width: 100%;
+  padding: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auth-card button:hover {
+  background: #1d4ed8;
+}
+
+/* Links */
+.auth-card a {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.hero {
+  height: 100vh;
+  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}

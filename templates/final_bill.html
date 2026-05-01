@@ -1,0 +1,17 @@
+<h3>Finalize Bill</h3>
+
+<form method="POST">
+
+<select name="doctor">
+{% for d in doctors %}
+<option value="{{d.id}}">
+Dr {{d.name}} - ₹{{d.fee}}
+</option>
+{% endfor %}
+</select>
+
+<button class="btn btn-success">
+Generate Final Invoice
+</button>
+
+</form>

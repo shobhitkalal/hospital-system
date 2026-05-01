@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Lab Reports{% endblock %}
+
+{% block content %}
+
+<!-- Add Report -->
+<div class="card p-4 mb-4">
+  <h5> Add Lab Report</h5>
+
+  <form method="POST" action="/add_report">
+    <input name="name" class="form-control mb-2" placeholder="Report Name" required>
+    <input name="description" class="form-control mb-2" placeholder="Description">
+    <input name="fee" type="number" class="form-control mb-2" placeholder="Fee" required>
+
+    <button class="btn btn-success mt-2">Add Report</button>
+  </form>
+</div>
+
+<!-- Toggle -->
+<button class="btn btn-primary mb-3" onclick="toggleReport(this)">View Reports</button>
+
+<div id="reportTable" style="display:none;">
+
+  <!-- Search -->
+  <input type="text" id="searchReport" class="form-control mb-3" placeholder="🔍 Search report...">
+
+  <div class="card p-3">
+
+    <table class="table table-hover" id="reportData">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Fee</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{r.name}}</td>
+          <td>{{r.description}}</td>
+          <td>₹{{r.fee}}</td>
+
+          <td>
+            <a href="/edit_report/{{r.id}}" class="btn btn-sm btn-warning">✏️</a>
+            <a href="/delete_report/{{r.id}}" class="btn btn-sm btn-danger"
+               onclick="return confirm('Delete this report?')">🗑</a>
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<script>
+function toggleReport(btn) {
+  let x = document.getElementById("reportTable");
+  x.style.display = x.style.display === "none" ? "block" : "none";
+  btn.innerText = x.style.display === "none" ? "View Reports" : "Hide Reports";
+}
+
+document.getElementById("searchReport").addEventListener("keyup", function() {
+  let filter = this.value.toLowerCase();
+  let rows = document.querySelectorAll("#reportData tbody tr");
+
+  rows.forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+  });
+});
+</script>
+
+{% endblock %}

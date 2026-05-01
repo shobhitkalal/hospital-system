@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<h4 class="mb-4">Welcome, {{ current_user.hospital_name }} !!!</h4>
+
+<div class="row">
+
+  <!-- Patients -->
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Patients</h5>
+      <h3>{{ patients|length }}</h3>
+    </div>
+  </div>
+
+  <!-- Medicines -->
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Medicines</h5>
+      <h3>{{ medicines|length }}</h3>
+    </div>
+  </div>
+
+  <!-- Reports -->
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5> Reports</h5>
+      <h3>{{ reports|length }}</h3>
+    </div>
+  </div>
+
+  <!-- Bills -->
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5> Bills</h5>
+      <h3>{{ bills|length }}</h3>
+    </div>
+  </div>
+
+</div>
+
+<!-- Role Based Quick Actions -->
+<div class="mt-5">
+
+  <h5>Quick Actions</h5>
+
+  <div class="row">
+
+    {% if current_user.role == 'admin' %}
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6>Manage Doctors </h6>
+          <a href="/doctors" class="btn btn-primary mt-2">Open</a>
+        <h6>Pending Bills</h6>
+        <a href="/pending_bills" class="btn btn-primary mt-2">View</a>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if current_user.role == 'pharmacist' %}
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6>Manage Medicines</h6>
+        <a href="/medicines" class="btn btn-success mt-2">Open</a>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if current_user.role == 'lab' %}
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6>Manage Reports</h6>
+        <a href="/lab_reports" class="btn btn-warning mt-2">Open</a>
+      </div>
+    </div>
+    {% endif %}
+    {% if current_user.role == 'pharmacist' or current_user.role == 'lab' %}
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h6>Create Bill</h6>
+        <a href="/billing" class="btn btn-success mt-2">Create Draft Bill</a>
+      </div>
+    </div>
+{% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

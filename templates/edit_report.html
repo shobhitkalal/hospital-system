@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card p-4">
+  <h5>Edit Lab Report</h5>
+
+  <form method="POST">
+    <input name="name" class="form-control mb-2" value="{{report.name}}">
+    <input name="description" class="form-control mb-2" value="{{report.description}}">
+    <input name="fee" class="form-control mb-2" value="{{report.fee}}">
+
+    <button class="btn btn-success">Update</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block content %}
+
+<div class="card p-3">
+  <h5>Add Doctor</h5>
+
+  <form method="POST" action="/add_doctor">
+
+    <div class="row">
+      <div class="col-md-4">
+        <input name="name" class="form-control" placeholder="Doctor Name" required>
+      </div>
+
+      <div class="col-md-4">
+        <input name="specialization" class="form-control" placeholder="Specialization">
+      </div>
+
+      <div class="col-md-4">
+        <input name="fee" class="form-control" placeholder="Consultation Fee">
+      </div>
+    </div>
+
+    <button class="btn btn-success mt-3">Add Doctor</button>
+
+  </form>
+</div>
+
+<br>
+
+<div class="card p-3">
+  <h5>Doctor List</h5>
+
+  <table class="table table-striped">
+    <tr>
+      <th>Name</th>
+      <th>Specialization</th>
+      <th>Fee</th>
+    </tr>
+
+    {% for d in doctors %}
+   <tr>
+  <td>{{d.name}}</td>
+  <td>{{d.specialization}}</td>
+  <td>₹{{d.fee}}</td>
+  <td>
+    <a href="/edit_doctor/{{d.id}}" class="btn btn-sm btn-warning">Edit</a>
+  </td>
+</tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

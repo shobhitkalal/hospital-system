@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Bills{% endblock %}
+{% block page_title %}Pending Bills{% endblock %}
+
+{% block content %}
+
+<div class="card p-4">
+
+  <h5 class="mb-3">Draft Bills</h5>
+
+  <form method="POST" action="/combine_bills">
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>Bill ID</th>
+          <th>Patient ID</th>
+          <th>Total</th>
+          <th>Created By</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for bill in bills %}
+        <tr>
+          <td>
+            <input type="checkbox" name="bill_ids" value="{{bill.id}}">
+          </td>
+
+          <td>#{{ bill.id }}</td>
+          <td>{{ bill.patient_id }}</td>
+          <td>₹{{ bill.total }}</td>
+          <td>{{ bill.created_by }}</td>
+
+          <td>
+            <a href="/invoice/{{bill.id}}" class="btn btn-success">View Invoice</a>
+          </td>
+        </tr>
+        {% endfor %}  
+      </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success mt-3">
+      Combine Selected Bills
+    </button>
+
+  </form>
+
+</div>
+
+{% endblock %}
