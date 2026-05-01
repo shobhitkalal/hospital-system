@@ -36,3 +36,7 @@ app.config['MAIL_USERNAME'] = 'shobhitkalal18@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tgpcxpvwpbzyqsny'
 
 mail = Mail(app)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
