@@ -300,7 +300,7 @@ Login to access your hospital dashboard.
 {% endwith %}
 
 
-<form method="POST">
+<form method="POST" autocomplete="off">
 
 <input
 type="email"
@@ -309,6 +309,7 @@ class="form-control"
 placeholder="Official Email"
 required
 maxlength="80"
+autocomplete="off"
 >
 
 
@@ -319,6 +320,7 @@ class="form-control"
 placeholder="Password"
 required
 minlength="8"
+autocomplete="new-password"
 >
 
 
@@ -331,7 +333,7 @@ Login
 
 <div class="security-box">
 ✓ Role-based secure login for Admin,
-Pharmacist and Lab Worker
+Pharmacist and Lab Administrative
 </div>
 
 
@@ -347,5 +349,6 @@ Register
 
 </div>
 
+</script>
 </body>
 </html>
